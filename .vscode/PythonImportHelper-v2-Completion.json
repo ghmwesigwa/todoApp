@@ -97,11 +97,28 @@
         "documentation": {}
     },
     {
+        "label": "error",
+        "importPath": "distutils.log",
+        "description": "distutils.log",
+        "isExtraImport": true,
+        "detail": "distutils.log",
+        "documentation": {}
+    },
+    {
         "label": "SQLAlchemy",
         "importPath": "flask_sqlalchemy",
         "description": "flask_sqlalchemy",
         "isExtraImport": true,
         "detail": "flask_sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -154,7 +171,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class Todo(db.Model):\n  __tablename__ = 'todos'\n  id = db.Column(db.Integer, primary_key=True)\n  description = db.Column(db.String(), nullable=False)\n  def __repr__(self):\n    return f'<Todo {self.id} {self.description}>'\ndb.create_all()\n@app.route('/todos/create', methods=['POST'])\ndef create_todo():\n   description = request.get_json()['description']",
+        "peekOfCode": "class Todo(db.Model):\n  __tablename__ = 'todos'\n  id = db.Column(db.Integer, primary_key=True)\n  description = db.Column(db.String(), nullable=False)\n  def __repr__(self):\n    return f'<Todo {self.id} {self.description}>'\ndb.create_all()\n@app.route('/todos/create', methods=['POST'])\ndef create_todo():\n  error = False",
         "detail": "app",
         "documentation": {}
     },
@@ -163,7 +180,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def create_todo():\n   description = request.get_json()['description']\n   todo = Todo(description=description)\n   db.session.add(todo)\n   db.session.commit();\n   return jsonify({\n        'description': todo.description\n     })\n@app.route('/')\ndef index():",
+        "peekOfCode": "def create_todo():\n  error = False\n  body = {}\n  try:\n    description = request.get_json()['description']\n    todo = Todo(description=description)\n    db.session.add(todo)\n    db.session.commit()\n    body['description'] = todo.description\n  except:",
         "detail": "app",
         "documentation": {}
     },

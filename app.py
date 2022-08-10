@@ -1,6 +1,8 @@
+from distutils.log import error
 from flask import (Flask, abort, jsonify, redirect, render_template, request,
                    url_for)
 from flask_sqlalchemy import SQLAlchemy
+import sys
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abc123@localhost:5432/todoapp'
@@ -19,14 +21,24 @@ db.create_all()
 
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
-   description = request.get_json()['description']
-   todo = Todo(description=description)
-   db.session.add(todo)
-   db.session.commit();
-   return jsonify({
-        'description': todo.description
-     })
-
+  error = False
+  body = {}
+  try:
+    description = request.get_json()['description']
+    todo = Todo(description=description)
+    db.session.add(todo)
+    db.session.commit()
+    body['description'] = todo.description
+  except:
+    error = True
+    db.session.rollback()
+    print(sys.exc_info())
+  finally:
+    db.session.close()
+  if error:
+    abort (400)
+  else:
+    return jsonify(body)
 
 
 @app.route('/')
