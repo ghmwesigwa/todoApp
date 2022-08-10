@@ -154,7 +154,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class Todo(db.Model):\n  __tablename__ = 'todos'\n  id = db.Column(db.Integer, primary_key=True)\n  description = db.Column(db.String(), nullable=False)\n  def __repr__(self):\n    return f'<Todo {self.id} {self.description}>'\ndb.create_all()\n@app.route('/todos/create', methods=['POST'])\ndef create_todo():\n  description = request.form.get('description')",
+        "peekOfCode": "class Todo(db.Model):\n  __tablename__ = 'todos'\n  id = db.Column(db.Integer, primary_key=True)\n  description = db.Column(db.String(), nullable=False)\n  def __repr__(self):\n    return f'<Todo {self.id} {self.description}>'\ndb.create_all()\n@app.route('/todos/create', methods=['POST'])\ndef create_todo():\n   description = request.get_json()['description']",
         "detail": "app",
         "documentation": {}
     },
@@ -163,7 +163,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def create_todo():\n  description = request.form.get('description')\n  todo = Todo(description=description)\n  db.session.add(todo)\n  db.session.commit()\n  return render_template('index.html', data=Todo.query.all())\n@app.route('/')\ndef index():\n  return render_template('index.html', data=Todo.query.all())\n#always include this at the bottom of your code",
+        "peekOfCode": "def create_todo():\n   description = request.get_json()['description']\n   todo = Todo(description=description)\n   db.session.add(todo)\n   db.session.commit();\n   return jsonify({\n        'description': todo.description\n     })\n@app.route('/')\ndef index():",
         "detail": "app",
         "documentation": {}
     },

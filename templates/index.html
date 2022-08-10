@@ -1,9 +1,14 @@
 <html>
   <head>
     <title>Todo App</title>
+    <style>
+      .hidden {
+          display: none;
+      }
+      </style>
   </head>
   <body>
-    <form method="post" action="/todos/create">
+    <form>
       <input type="text" name="description" id="description" />
       <input type="submit" value="Create" />
     </form>
@@ -12,5 +17,33 @@
       <li>{{ d.description }}</li>
       {% endfor %}
     </ul>
+
+    <div class = "hidden" id = "error" style="display:none;"> Something went wrong! </div>
+    <script>
+      document.getElementById('form'.onsubmit = function (e) {
+         e.preventDefaut();
+         fetch('/todos/create', {
+                    method: 'POST'
+                    body: JSON.stringify({'description':document.getElemeent.ById('description').value
+                         }),
+                     headers: {
+                              'Content-Type': 'application/json'
+                             }
+          })
+          .then(function(response) {
+               return response.json();
+          })
+          .then(function(jsonresponse) {
+               console.log(jsonresponse);
+               const liItem= document.createElement('LI');
+               liItem.innerHTML = jsonResponse['description'];
+               document.getElementById('todo').appendChild(liItem);
+               document.getElementById('error').classname='hidden';
+          })
+          .catch(function() {
+               document.getElementById('error').classname='';
+                }
+
+      }
   </body>
 </html>
